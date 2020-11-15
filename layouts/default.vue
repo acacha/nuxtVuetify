@@ -80,6 +80,11 @@ export default {
           title: 'Inspire',
           to: '/inspire',
         },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Tasques',
+          to: '/tasks',
+        },
       ],
       miniVariant: false,
       right: true,
