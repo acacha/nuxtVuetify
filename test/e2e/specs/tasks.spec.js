@@ -21,8 +21,6 @@ const sampleItems = ['Comprar pa', 'Comprar llet', 'Fer les pràctiques de Tur']
 // ]
 
 describe('Tasks tests', () => {
-  it('should open correct app', () => {
-
   it('should add items to the list correctly using enter', () => {
     TasksPage.open()
     TasksPage.addListItems(sampleItems)
