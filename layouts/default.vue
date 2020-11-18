@@ -88,8 +88,13 @@ export default {
         },
         {
           icon: 'mdi-chart-bubble',
+          title: 'Tasques Ok',
+          to: '/tasksOk',
+        },
+        {
+          icon: 'mdi-chart-bubble',
           title: 'Prova',
-          to: '/tasks',
+          to: '/prova',
         },
       ],
       miniVariant: false,
