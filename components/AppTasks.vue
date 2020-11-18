@@ -25,7 +25,20 @@
               <v-switch @click="toggle(task)"></v-switch
             ></v-list-item-action>
             <v-list-item-title>
-              {{ task.title }}
+              <span
+                v-if="!editedTask"
+                :class="{ completed: task.completed }"
+                @dblclick="editTask(task)"
+                >{{ task.title }}</span
+              >
+              <v-text-field
+                v-if="editedTask"
+                v-model="task.title"
+                autofocus
+                @blur="doneEdit(task)"
+                @keyup.enter="doneEdit(task)"
+                @keyup.esc="cancelEdit(task)"
+              ></v-text-field>
             </v-list-item-title>
             <v-list-item-action>
               <v-btn color="success" icon @click="editTask(task)">
@@ -61,6 +74,7 @@ export default {
     return {
       newTask: '',
       editedTask: null,
+      visibility: 'all',
     }
   },
   methods: {
@@ -86,19 +100,16 @@ export default {
         return
       }
       this.editedTask = null
-      task.title = task.title.trim()
-      if (!task.title) {
-        this.removeTask(task)
-      }
-    },
-
-    toggle(task) {
-      this.$store.commit('tasks/toggle', task)
+      this.$store.commit('tasks/edit', { task, title: task.title.trim() })
     },
 
     cancelEdit(task) {
       this.editedTask = null
-      task.title = this.beforeEditCache
+      this.$store.commit('tasks/edit', { task, title: this.beforeEditCache })
+    },
+
+    toggle(task) {
+      this.$store.commit('tasks/toggle', task)
     },
 
     // removeCompleted() {
@@ -107,3 +118,9 @@ export default {
   },
 }
 </script>
+
+<style>
+.completed {
+  text-decoration: line-through;
+}
+</style>
