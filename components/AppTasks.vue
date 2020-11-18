@@ -19,10 +19,10 @@
         </v-form>
       </v-toolbar>
       <v-list>
-        <div v-for="task in tasks" :key="task.id">
+        <div v-for="task in filteredTasks" :key="task.id">
           <v-list-item>
             <v-list-item-action>
-              <v-switch @click="toggle(task)"></v-switch
+              <v-switch :value="task.completed" @click="toggle(task)"></v-switch
             ></v-list-item-action>
             <v-list-item-title>
               <span
@@ -55,14 +55,49 @@
         </div>
       </v-list>
       <v-toolbar>
-        <v-toolbar-title>3 Tasques pendents per fer</v-toolbar-title>
+        <v-toolbar-title
+          >{{ remaining }} Tasques pendents per fer</v-toolbar-title
+        >
       </v-toolbar>
       <!--    TODO Toolbar tingui botons accions per filtrar: All / Active / Completed -->
+      <ul class="filters">
+        <li>
+          <a href="#/all" :class="{ selected: visibility === 'all' }">All</a>
+        </li>
+        <li>
+          <a href="#/active" :class="{ selected: visibility === 'active' }"
+            >Active</a
+          >
+        </li>
+        <li>
+          <a
+            href="#/completed"
+            :class="{ selected: visibility === 'completed' }"
+            >Completed</a
+          >
+        </li>
+      </ul>
     </v-card>
   </div>
 </template>
 
 <script>
+const filters = {
+  all(tasks) {
+    return tasks
+  },
+  active(tasks) {
+    return tasks.filter(function (task) {
+      return !task.completed
+    })
+  },
+  completed(tasks) {
+    return tasks.filter(function (task) {
+      return task.completed
+    })
+  },
+}
+
 export default {
   props: {
     tasks: {
@@ -78,7 +113,28 @@ export default {
       visibility: 'all',
     }
   },
+  computed: {
+    filteredTasks() {
+      return filters[this.visibility](this.tasks)
+    },
+    remaining() {
+      return filters.active(this.tasks).length
+    },
+  },
+  mounted() {
+    window.addEventListener('hashchange', this.onHashChange)
+    this.onHashChange()
+  },
   methods: {
+    onHashChange() {
+      const visibility = window.location.hash.replace(/#\/?/, '')
+      if (filters[visibility]) {
+        this.visibility = visibility
+      } else {
+        window.location.hash = ''
+        this.visibility = 'all'
+      }
+    },
     addTask() {
       const value = this.newTask && this.newTask.trim()
       if (!value) {
