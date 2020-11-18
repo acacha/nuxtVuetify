@@ -26,14 +26,14 @@
             ></v-list-item-action>
             <v-list-item-title>
               <span
-                v-if="!editedTask"
+                v-if="!(editing === task.id)"
                 :class="{ completed: task.completed }"
                 @dblclick="editTask(task)"
                 >{{ task.title }}</span
               >
               <v-text-field
-                v-if="editedTask"
-                v-model="task.title"
+                v-else
+                v-model="editedTask.title"
                 autofocus
                 @blur="doneEdit(task)"
                 @keyup.enter="doneEdit(task)"
@@ -72,6 +72,7 @@ export default {
   },
   data() {
     return {
+      editing: null,
       newTask: '',
       editedTask: null,
       visibility: 'all',
@@ -91,20 +92,26 @@ export default {
     },
 
     editTask(task) {
+      this.editing = task.id
       this.beforeEditCache = task.title
-      this.editedTask = task
+      this.editedTask = { ...task }
     },
 
     doneEdit(task) {
       if (!this.editedTask) {
         return
       }
+      this.$store.commit('tasks/edit', {
+        task: this.editedTask,
+        title: this.editedTask.title.trim(),
+      })
       this.editedTask = null
-      this.$store.commit('tasks/edit', { task, title: task.title.trim() })
+      this.editing = null
     },
 
     cancelEdit(task) {
       this.editedTask = null
+      this.editing = null
       this.$store.commit('tasks/edit', { task, title: this.beforeEditCache })
     },
 
