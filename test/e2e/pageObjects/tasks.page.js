@@ -25,6 +25,7 @@ class Page {
     // TODO: Part fràgil del test -> CSS selectors: Que passa si acabem afegint més d'un input type text?
     // eslint-disable-next-line no-undef
     return $('input[type=text]')
+    // return $('[qa="input_text_new_task"]')
   }
 
   get itemEditInput() {

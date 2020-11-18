@@ -22,10 +22,6 @@ const sampleItems = ['Comprar pa', 'Comprar llet', 'Fer les pràctiques de Tur']
 
 describe('Tasks tests', () => {
   it('should open correct app', () => {
-    TasksPage.open()
-    // eslint-disable-next-line no-undef
-    expect(browser).toHaveTitle('nuxtVuetify - nuxtVuetify')
-  })
 
   it('should add items to the list correctly using enter', () => {
     TasksPage.open()

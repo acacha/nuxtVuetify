@@ -55,7 +55,7 @@
         </div>
       </v-list>
       <v-toolbar>
-        <v-toolbar-title
+        <v-toolbar-title qa="footer_title"
           >{{ remaining }} Tasques pendents per fer</v-toolbar-title
         >
       </v-toolbar>
