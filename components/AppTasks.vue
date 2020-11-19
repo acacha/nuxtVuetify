@@ -15,19 +15,30 @@
             placeholder="Que cal fer?"
             @keyup.enter="addTask"
           ></v-text-field>
-          <v-btn class="ml-2" color="primary" @click="addTask">Afegir</v-btn>
+          <v-btn
+            class="ml-2"
+            color="primary"
+            qa="add-task-submit-button"
+            @click="addTask"
+            >Afegir</v-btn
+          >
         </v-form>
       </v-toolbar>
-      <v-list>
+      <v-list qa="tasks_list">
         <div v-for="task in filteredTasks" :key="task.id">
-          <v-list-item>
+          <v-list-item qa="tasks_list_item">
             <v-list-item-action>
-              <v-switch :value="task.completed" @click="toggle(task)"></v-switch
+              <v-switch
+                :value="task.completed"
+                qa="tasks_list_item_toogle"
+                @click="toggle(task)"
+              ></v-switch
             ></v-list-item-action>
             <v-list-item-title>
               <span
                 v-if="!(editing === task.id)"
                 :class="{ completed: task.completed }"
+                qa="tasks_list_item_title"
                 @dblclick="editTask(task)"
                 >{{ task.title }}</span
               >
@@ -41,12 +52,22 @@
               ></v-text-field>
             </v-list-item-title>
             <v-list-item-action>
-              <v-btn color="success" icon @click="editTask(task)">
+              <v-btn
+                color="success"
+                icon
+                qa="tasks_list_item_edit_button"
+                @click="editTask(task)"
+              >
                 <v-icon>mdi-account</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
-              <v-btn color="error" icon @click="removeTask(task)">
+              <v-btn
+                color="error"
+                icon
+                qa="tasks_list_item_delete_button"
+                @click="removeTask(task)"
+              >
                 <v-icon>mdi-close</v-icon>
               </v-btn>
             </v-list-item-action>
@@ -55,17 +76,26 @@
         </div>
       </v-list>
       <v-toolbar>
-        <v-toolbar-title qa="footer_title"
-          >{{ remaining }} Tasques pendents per fer</v-toolbar-title
-        >
+        <v-toolbar-title
+          qa="footer_title"
+          v-text="footerTitle"
+        ></v-toolbar-title>
       </v-toolbar>
       <!--    TODO Toolbar tingui botons accions per filtrar: All / Active / Completed -->
       <ul class="filters">
         <li>
-          <a href="#/all" :class="{ selected: visibility === 'all' }">All</a>
+          <a
+            href="#/all"
+            :class="{ selected: visibility === 'all' }"
+            qa="filter_all"
+            >All</a
+          >
         </li>
         <li>
-          <a href="#/active" :class="{ selected: visibility === 'active' }"
+          <a
+            href="#/active"
+            :class="{ selected: visibility === 'active' }"
+            qa="filter_pending"
             >Active</a
           >
         </li>
@@ -73,6 +103,7 @@
           <a
             href="#/completed"
             :class="{ selected: visibility === 'completed' }"
+            qa="filter_completed"
             >Completed</a
           >
         </li>
@@ -114,6 +145,12 @@ export default {
     }
   },
   computed: {
+    footerTitle() {
+      if (this.remaining === 0)
+        return 'Enhorabona! No tens cap tasca pendent de fer'
+      if (this.remaining === 1) return '1 Tasca pendent de fer'
+      return this.remaining + ' Tasques pendents de fer'
+    },
     filteredTasks() {
       return filters[this.visibility](this.tasks)
     },

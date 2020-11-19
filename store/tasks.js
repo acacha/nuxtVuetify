@@ -2,21 +2,21 @@ import { v4 as uuidv4 } from 'uuid'
 
 export const state = () => ({
   list: [
-    {
-      id: uuidv4(),
-      title: 'Comprar pa',
-      completed: false,
-    },
-    {
-      id: uuidv4(),
-      title: 'Comprar llet',
-      completed: false,
-    },
-    {
-      id: uuidv4(),
-      title: 'Fer pràctiques de Tur',
-      completed: false,
-    },
+    // {
+    //   id: uuidv4(),
+    //   title: 'Comprar pa',
+    //   completed: false,
+    // },
+    // {
+    //   id: uuidv4(),
+    //   title: 'Comprar llet',
+    //   completed: false,
+    // },
+    // {
+    //   id: uuidv4(),
+    //   title: 'Fer pràctiques de Tur',
+    //   completed: false,
+    // },
   ],
 })
 

@@ -14,6 +14,13 @@ exports.config = {
   //
   specs: ['./test/e2e/**/*.spec.js'],
   // Patterns to exclude.
+
+  suites: {
+    login: ['./test/e2e/specs/login.spec.js'],
+    tasksok: ['./test/e2e/specs/tasksok.spec.js'],
+    tasks: ['./test/e2e/specs/tasks.spec.js'],
+  },
+
   exclude: [
     // 'path/to/excluded/files'
   ],
@@ -60,7 +67,7 @@ exports.config = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   // Level of logging verbosity: trace | debug | info | warn | error | silent
-  logLevel: 'info',
+  logLevel: 'silent',
   //
   // Set specific log levels per logger
   // loggers:
@@ -127,6 +134,7 @@ exports.config = {
   mochaOpts: {
     ui: 'bdd',
     timeout: 60000,
+    bail: true, // STOP AT FIRST ERROR
   },
   //
   // =====

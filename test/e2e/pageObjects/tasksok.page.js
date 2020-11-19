@@ -1,29 +1,9 @@
 // https://webdriver.io/docs/pageobjects.html
 class Page {
-  open(path = '/tasks') {
+  open(path = '/tasksok') {
     // eslint-disable-next-line no-undef
     browser.url(path)
   }
-
-  // CSS SELECTORS
-  // https://ghostinspector.com/blog/css-selector-strategies-automated-browser-testing/
-
-  // PER ID:
-  // <input id="email" value=""> => #email  => PROBLEMA => Name col·lisión: és fàcil acabin haven més de dos ids iguals a la pàgina al juntar components
-
-  // Per attributes
-  // <input name="email" value=""> => [name="email"]
-
-  // Exemples que són iguals => [id="identifier-here"] === #identifier-here
-
-  // Mirar si existeix un link a /docs => [href="/docs/"]
-
-  // CLASS NAME:
-  // <div class="some-class another-class">...</div> => .class-name === [class*="class-name"]
-
-  // TODO. Exercici pels alumnes
-  // Atributs dedicats a testing a les plantilles
-  // [data-testing="id-here"] or [qa="id-here"] => Qa és de Quality Assurance
 
   // https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Funciones/get
   get itemInput() {
@@ -73,31 +53,37 @@ class Page {
 
   get itemSubmit() {
     // eslint-disable-next-line no-undef
-    return $('[qa="add-todo-submit-button"]')
+    return $('[qa="add-task-submit-button"]')
   }
 
   get list() {
     // TODO: Part fràgil del test -> CSS selectors: Que passa si acabem canviant el nom de la classe?
     // eslint-disable-next-line no-undef
-    return $('.todolist')
+    return $('[qa="tasks_list"]')
   }
 
   get listItems() {
     // TODO: Part fràgil del test -> CSS selectors: Que passa si acabem canviant el nom de la classe?
     // eslint-disable-next-line no-undef
-    return $$('.todolist__item')
+    return $$('[qa="tasks_list_item"]')
+  }
+
+  get listItemTitles() {
+    // TODO: Part fràgil del test -> CSS selectors: Que passa si acabem canviant el nom de la classe?
+    // eslint-disable-next-line no-undef
+    return $$('[qa="tasks_list_item_title"]')
   }
 
   get deleteButtons() {
     // TODO: Part fràgil del test -> CSS selectors: Que passa si acabem canviant el nom de la classe?
     // eslint-disable-next-line no-undef
-    return $$('.todolist__item-deleteBtn')
+    return $$('[qa="tasks_list_item_delete_button"]')
   }
 
   get editButtons() {
     // TODO: Part fràgil del test -> CSS selectors: Que passa si acabem canviant el nom de la classe?
     // eslint-disable-next-line no-undef
-    return $$('.todolist__item-editBtn')
+    return $$('[qa="tasks_list_item_delete_button"]')
   }
 
   get flash() {
@@ -108,7 +94,7 @@ class Page {
   get listItemsToggles() {
     // TODO: Part fràgil del test -> CSS selectors: Que passa si acabem canviant el nom de la classe?
     // eslint-disable-next-line no-undef
-    return $$('.todolist__item-toggle')
+    return $$('[qa="tasks_list_item_toogle"]')
   }
 
   get listSize() {
@@ -125,7 +111,9 @@ class Page {
   }
 
   isItemCompletedAt(position) {
-    return this.listItems[position].getAttribute('class').includes('completed')
+    return this.listItemTitles[position]
+      .getAttribute('class')
+      .includes('completed')
   }
 
   toogleItemAt(position) {
