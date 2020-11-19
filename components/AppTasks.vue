@@ -29,9 +29,10 @@
           <v-list-item qa="tasks_list_item">
             <v-list-item-action>
               <v-switch
+                :input-value="task.completed"
                 :value="task.completed"
                 qa="tasks_list_item_toogle"
-                @click="toggle(task)"
+                @change="toggle(task)"
               ></v-switch
             ></v-list-item-action>
             <v-list-item-title>
@@ -212,9 +213,9 @@ export default {
       this.$store.commit('tasks/toggle', task)
     },
 
-    // removeCompleted() {
-    //   this.tasks = filters.active(this.tasks)
-    // },
+    removeCompleted() {
+      this.tasks = filters.active(this.tasks)
+    },
   },
 }
 </script>
