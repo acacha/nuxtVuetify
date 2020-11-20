@@ -83,7 +83,7 @@ class Page {
   get editButtons() {
     // TODO: Part fràgil del test -> CSS selectors: Que passa si acabem canviant el nom de la classe?
     // eslint-disable-next-line no-undef
-    return $$('[qa="tasks_list_item_delete_button"]')
+    return $$('[qa="tasks_list_item_edit_button"]')
   }
 
   get flash() {
