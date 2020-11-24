@@ -28,7 +28,7 @@ describe('Tasks tests', () => {
     expect(TasksPage.footerTitle).toHaveText('3 Tasques pendents de fer')
   })
 
-  it('shows flash message when user task is added', () => {
+  it('shows flash message when user adds a task', () => {
     TasksPage.open()
     TasksPage.addListItem('Comprar pa')
     expect(TasksPage.listSize).toEqual(1)

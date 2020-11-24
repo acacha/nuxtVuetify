@@ -7,7 +7,7 @@
       </v-toolbar>
       <!--    TODO Toolbar tingui botons accions per: tancar(no mostrar), maximitzar, minimitzar -->
       <v-toolbar>
-        <v-form class="d-flex align-baseline" @submit.prevent="addTask">
+        <v-form class="d-flex align-baseline" @submit.prevent="">
           <v-text-field
             v-model="newTask"
             autofocus
@@ -22,8 +22,14 @@
         <div v-for="task in tasks" :key="task.id">
           <v-list-item>
             <v-list-item-action>
-              <v-switch :value="task.completed" @click="toggle(task)"></v-switch
-            ></v-list-item-action>
+              <!--              v-model -> SYNTAX SUGAR-->
+              <v-switch v-model="task.completed"></v-switch>
+              <!--              // DATA BINDING: One way || Two way-->
+              <!--              <v-switch-->
+              <!--                :value="task.completed"-->
+              <!--                @change="task.completed = $event.target.value"-->
+              <!--              ></v-switch>-->
+            </v-list-item-action>
             <v-list-item-title>
               <v-text-field
                 v-if="editing === task.id"
@@ -47,12 +53,28 @@
         </div>
       </v-list>
       <v-toolbar>
-        <v-toolbar-title qa="footer_title"
-          >3 Tasques pendents per fer</v-toolbar-title
-        >
+        <v-toolbar-title qa="footer_title">
+          <span v-show="remaining === 0"
+            >Enhorabona! No tens cap tasca pendent de fer</span
+          >
+
+          <span v-show="remaining === 1"
+            >{{ remaining }} Tasca pendent de fer</span
+          >
+
+          <span v-show="remaining > 1"
+            >{{ remaining }} Tasques pendents de fer</span
+          >
+
+          | Completed: {{ completed }}
+        </v-toolbar-title>
       </v-toolbar>
       <!--    TODO Toolbar tingui botons accions per filtrar: All / Active / Completed -->
     </v-card>
+
+    <v-snackbar v-model="showSnackbar">
+      Tasca afegida correctament!
+    </v-snackbar>
   </div>
 </template>
 
@@ -66,7 +88,24 @@ export default {
       editing: null,
       tasks: [],
       newTask: '',
+      showSnackbar: false,
     }
+  },
+  computed: {
+    remaining() {
+      // return this.tasks.length
+      return this.tasks.filter((task) => !task.completed).length
+      // return this.tasks.filter(function (task) {
+      //   return task.completed === false
+      // })
+    },
+    completed() {
+      // return this.tasks.length
+      return this.tasks.filter((task) => task.completed).length
+      // return this.tasks.filter(function (task) {
+      //   return task.completed === false
+      // })
+    },
   },
   methods: {
     addTask() {
@@ -78,6 +117,7 @@ export default {
         completed: false,
       })
       this.newTask = ''
+      this.showSnackbar = true
     },
     editTask(task) {
       this.editing = task.id
@@ -88,15 +128,21 @@ export default {
       console.log(task)
     },
     deleteTask(task) {
+      // this.tasks.splice(
+      //   this.tasks.indexOf(this.tasks.find((t) => t.id === task.id)),
+      //   1
+      // )
+      this.tasks.splice(task, 1)
+
       // TODO
       // https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/splice
-      console.log('TODO DELETE TASK')
-      console.log(task)
+      // console.log('TODO DELETE TASK')
+      // console.log(task)
     },
-    toggle(task) {
-      console.log('TODO TOGGLE TASK')
-      console.log(task)
-    },
+    // toggle(task) {
+    //   console.log('TODO TOGGLE TASK')
+    //   console.log(task)
+    // },
   },
 }
 </script>
