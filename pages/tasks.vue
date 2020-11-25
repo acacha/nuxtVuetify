@@ -19,7 +19,7 @@
         </v-form>
       </v-toolbar>
       <v-list>
-        <div v-for="task in tasks" :key="task.id">
+        <div v-for="task in filteredTasks" :key="task.id">
           <v-list-item>
             <v-list-item-action>
               <!--              v-model -> SYNTAX SUGAR-->
@@ -32,19 +32,22 @@
             </v-list-item-action>
             <v-list-item-title>
               <v-text-field
-                v-if="editing === task.id"
-                v-model="newTask"
+                v-if="editing.id === task.id"
+                v-model="editing.title"
                 autofocus
+                @keydown.enter="editTask"
               ></v-text-field>
-              <span v-else @dblclick="editTask(task)">{{ task.title }}</span>
+              <span v-else @dblclick="initEditingProcess(task)">{{
+                task.title
+              }}</span>
             </v-list-item-title>
             <v-list-item-action>
-              <v-btn color="success" icon @click="editTask(task)">
+              <v-btn color="success" icon @click="initEditingProcess(task)">
                 <v-icon>mdi-account</v-icon>
               </v-btn>
             </v-list-item-action>
             <v-list-item-action>
-              <v-btn color="error" icon @click="deleteTask(task)">
+              <v-btn color="error" icon @click="initDeleteProcess(task)">
                 <v-icon>mdi-close</v-icon>
               </v-btn>
             </v-list-item-action>
@@ -72,26 +75,99 @@
       <!--    TODO Toolbar tingui botons accions per filtrar: All / Active / Completed -->
     </v-card>
 
+    <ul class="filters">
+      <li>
+        <a
+          href="#/all"
+          :class="{ selected: visibility === 'all' }"
+          qa="filter_all"
+          >All</a
+        >
+      </li>
+      <li>
+        <a
+          href="#/active"
+          :class="{ selected: visibility === 'active' }"
+          qa="filter_pending"
+          >Active</a
+        >
+      </li>
+      <li>
+        <a
+          href="#/completed"
+          :class="{ selected: visibility === 'completed' }"
+          qa="filter_completed"
+          >Completed</a
+        >
+      </li>
+    </ul>
+
     <v-snackbar v-model="showSnackbar">
-      Tasca afegida correctament!
+      {{ snackBarMessage }}
     </v-snackbar>
+
+    <v-dialog :value="showDeleteConfirmationDialog" max-width="290">
+      <v-card>
+        <v-card-title>Esteu segurs?</v-card-title>
+        <v-card-text
+          >Tingueu en compte que les tasques esborrades no es poden
+          recuperar.</v-card-text
+        >
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            text
+            qa="cancel_button"
+            @click="showDeleteConfirmationDialog = false"
+            >Cancel·lar</v-btn
+          >
+          <v-btn color="error" qa="delete_button" @click="deleteTask(task)"
+            >Eliminar</v-btn
+          >
+          <v-spacer />
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import { v4 as uuidv4 } from 'uuid'
 
+const filters = {
+  all(tasks) {
+    return tasks
+  },
+  active(tasks) {
+    return tasks.filter(function (task) {
+      return !task.completed
+    })
+  },
+  completed(tasks) {
+    return tasks.filter(function (task) {
+      return task.completed
+    })
+  },
+}
+
 export default {
   name: 'Tasks',
   data() {
     return {
-      editing: null,
+      snackBarMessage: '',
+      editing: {},
       tasks: [],
       newTask: '',
       showSnackbar: false,
+      showDeleteConfirmationDialog: false,
+      visibility: 'all',
     }
   },
   computed: {
+    filteredTasks() {
+      // return this.tasks
+      return filters[this.visibility](this.tasks)
+    },
     remaining() {
       // return this.tasks.length
       return this.tasks.filter((task) => !task.completed).length
@@ -107,7 +183,21 @@ export default {
       // })
     },
   },
+  mounted() {
+    window.addEventListener('hashchange', this.onHashChange)
+    this.onHashChange()
+  },
   methods: {
+    onHashChange() {
+      const visibility = window.location.hash.replace(/#\/?/, '')
+      // VISIBILITY: all / completed / pending
+      if (filters[visibility]) {
+        this.visibility = visibility
+      } else {
+        window.location.hash = ''
+        this.visibility = 'all'
+      }
+    },
     addTask() {
       // https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array
       // ARRAYS -> COLLECTIONS
@@ -117,27 +207,37 @@ export default {
         completed: false,
       })
       this.newTask = ''
+      this.snackBarMessage = 'Tasca afegida correctament!'
       this.showSnackbar = true
     },
-    editTask(task) {
-      this.editing = task.id
-
-      // indexOf
-      // this.tasks[index].title = sdasdadsa
-      console.log('TODO EDIT TASK')
-      console.log(task)
+    editTask() {
+      const task = this.tasks.find((t) => t.id === this.editing.id)
+      task.title = this.editing.title
+      this.editing = {}
+      this.snackBarMessage = 'Tasca modificada correctament!'
+      this.showSnackbar = true
     },
-    deleteTask(task) {
-      // this.tasks.splice(
-      //   this.tasks.indexOf(this.tasks.find((t) => t.id === task.id)),
-      //   1
-      // )
-      this.tasks.splice(task, 1)
-
-      // TODO
+    initEditingProcess(task) {
+      // this.editing.id = task.id
+      // this.editing.title = task.title
+      this.editing = task
+    },
+    initDeleteProcess(task) {
+      this.showDeleteConfirmationDialog = true
+      this.taskBeinDeleted = { ...task }
+    },
+    deleteTask() {
       // https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/splice
-      // console.log('TODO DELETE TASK')
-      // console.log(task)
+      this.tasks.splice(
+        this.tasks.indexOf(
+          this.tasks.find((t) => t.id === this.taskBeinDeleted.id)
+        ),
+        1
+      )
+      // this.tasks.splice(this.taskBeinDeleted, 1)
+      this.showDeleteConfirmationDialog = false
+      this.snackBarMessage = 'Tasca eliminada correctament!'
+      this.showSnackbar = true
     },
     // toggle(task) {
     //   console.log('TODO TOGGLE TASK')

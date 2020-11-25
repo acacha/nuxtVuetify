@@ -68,6 +68,13 @@ describe('Tasks tests', () => {
 
     TasksPage.deleteItemAt(0)
 
+    expect(TasksPage.flash).toHaveText('Esteu segurs?')
+    expect(TasksPage.flash).toHaveText(
+      'Tingueu en compte que les tasques esborrades no es poden recuperar.'
+    )
+
+    TasksPage.confirmDeleteItem()
+
     expect(TasksPage.flash).toHaveText('Tasca eliminada correctament!')
     expect(TasksPage.list).not.toHaveText('Comprar pa')
   })
@@ -76,6 +83,7 @@ describe('Tasks tests', () => {
     TasksPage.open()
     TasksPage.addListItem('Comprar pa')
 
+    // TODO
     TasksPage.editItemAt(0, 'Comprar llet')
 
     expect(TasksPage.flash).toHaveText('Tasca modificada correctament!')

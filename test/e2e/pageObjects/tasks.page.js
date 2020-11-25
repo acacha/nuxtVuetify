@@ -94,6 +94,11 @@ class Page {
     return $$('.todolist__item-deleteBtn')
   }
 
+  get deleteButton() {
+    // eslint-disable-next-line no-undef
+    return $('[qa="delete_button"]')
+  }
+
   get editButtons() {
     // TODO: Part fràgil del test -> CSS selectors: Que passa si acabem canviant el nom de la classe?
     // eslint-disable-next-line no-undef
@@ -139,6 +144,10 @@ class Page {
 
   deleteItemAt(position) {
     this.deleteButtons[position].click()
+  }
+
+  confirmDeleteItem() {
+    this.deleteButton.click()
   }
 
   addListItems(items) {
