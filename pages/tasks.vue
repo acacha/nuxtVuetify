@@ -166,7 +166,7 @@ const tasksStorage = {
   },
 }
 
-export default {
+const vue = {
   name: 'Tasks',
   data() {
     return {
@@ -270,4 +270,6 @@ export default {
     // },
   },
 }
+
+export default vue
 </script>
