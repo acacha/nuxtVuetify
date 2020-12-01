@@ -150,6 +150,22 @@ const filters = {
   },
 }
 
+const STORAGE_KEY = 'todos-vuejs-2.0'
+
+const tasksStorage = {
+  fetch() {
+    const todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+    //    todos.forEach(function (todo, index) {
+    //      todo.id = index
+    //    })
+    //  todoStorage.uid = todos.length
+    return todos
+  },
+  save(todos) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
+  },
+}
+
 export default {
   name: 'Tasks',
   data() {
@@ -183,9 +199,18 @@ export default {
       // })
     },
   },
+  watch: {
+    tasks: {
+      handler(tasks) {
+        tasksStorage.save(tasks)
+      },
+      deep: true,
+    },
+  },
   mounted() {
     window.addEventListener('hashchange', this.onHashChange)
     this.onHashChange()
+    this.tasks = tasksStorage.fetch()
   },
   methods: {
     onHashChange() {
