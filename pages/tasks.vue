@@ -150,21 +150,21 @@ const filters = {
   },
 }
 
-const STORAGE_KEY = 'todos-vuejs-2.0'
+// const STORAGE_KEY = 'todos-vuejs-2.0'
 
-const tasksStorage = {
-  fetch() {
-    const todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-    //    todos.forEach(function (todo, index) {
-    //      todo.id = index
-    //    })
-    //  todoStorage.uid = todos.length
-    return todos
-  },
-  save(todos) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
-  },
-}
+// const tasksStorage = {
+//   fetch() {
+//     const todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+//     //    todos.forEach(function (todo, index) {
+//     //      todo.id = index
+//     //    })
+//     //  todoStorage.uid = todos.length
+//     return todos
+//   },
+//   save(todos) {
+//     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
+//   },
+// }
 
 // const tasksStorageApi = {
 //   fetch() {
@@ -210,7 +210,20 @@ const vue = {
   watch: {
     tasks: {
       handler(tasks) {
-        tasksStorage.save(tasks)
+        // tasksStorage.save(tasks)
+        // PUT http://localhost:8000/api/v1/user/tasks -> tasks
+        // $axios
+        this.$axios.setToken(
+          'vXrBmYo4BnIEFECvqKjMYqfLphS8ffPMyqjK6Qri',
+          'Bearer'
+        )
+        const response = this.$axios.$put(
+          'http://localhost:8000/api/v1/user/tasks',
+          {
+            tasks: this.tasks,
+          }
+        )
+        console.log(response)
       },
       deep: true,
     },
@@ -230,32 +243,33 @@ const vue = {
     // console.log(ctx)
     // ctx -> Context
     return {
-      tasks: [
-        {
-          id: 1,
-          title: 'Pariatur dolor eos aperiam vitae dolor et.',
-          completed: false,
-          user_id: '1',
-          created_at: '2020-12-14T16:34:11.000000Z',
-          updated_at: '2020-12-14T16:34:11.000000Z',
-        },
-        {
-          id: 2,
-          title: 'Corporis ut sunt placeat magni.',
-          completed: false,
-          user_id: '1',
-          created_at: '2020-12-14T16:34:11.000000Z',
-          updated_at: '2020-12-14T16:34:11.000000Z',
-        },
-        {
-          id: 3,
-          title: 'Corporis ut sunt placeat magni.',
-          completed: false,
-          user_id: '1',
-          created_at: '2020-12-14T16:34:11.000000Z',
-          updated_at: '2020-12-14T16:34:11.000000Z',
-        },
-      ],
+      tasks: response,
+      //   [
+      //   {
+      //     id: 1,
+      //     title: 'Pariatur dolor eos aperiam vitae dolor et.',
+      //     completed: false,
+      //     user_id: '1',
+      //     created_at: '2020-12-14T16:34:11.000000Z',
+      //     updated_at: '2020-12-14T16:34:11.000000Z',
+      //   },
+      //   {
+      //     id: 2,
+      //     title: 'Corporis ut sunt placeat magni.',
+      //     completed: false,
+      //     user_id: '1',
+      //     created_at: '2020-12-14T16:34:11.000000Z',
+      //     updated_at: '2020-12-14T16:34:11.000000Z',
+      //   },
+      //   {
+      //     id: 3,
+      //     title: 'Corporis ut sunt placeat magni.',
+      //     completed: false,
+      //     user_id: '1',
+      //     created_at: '2020-12-14T16:34:11.000000Z',
+      //     updated_at: '2020-12-14T16:34:11.000000Z',
+      //   },
+      // ],
     }
   },
   mounted() {
