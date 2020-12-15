@@ -166,6 +166,14 @@ const tasksStorage = {
   },
 }
 
+// const tasksStorageApi = {
+//   fetch() {
+//     // CLIENT HTTP
+//     // AXIOS -> NUXT AXIOS -> SSR
+//   },
+//   save(todos) {},
+// }
+
 const vue = {
   name: 'Tasks',
   data() {
@@ -207,10 +215,54 @@ const vue = {
       deep: true,
     },
   },
+  async asyncData({ $axios }) {
+    // asyncData(ctx) {
+    //   ctx.$axios
+    // JAVASCRIPT then catch -> PROMISES -> async /await -> PROMISES HELL CALLBACK
+    $axios.setToken('vXrBmYo4BnIEFECvqKjMYqfLphS8ffPMyqjK6Qri', 'Bearer')
+    // await $axios.$get('http://laravelserver.test/api/v1/user/tasks')
+    const response = await $axios.$get(
+      'http://localhost:8000/api/v1/user/tasks'
+    )
+    console.log(response)
+    console.log('ASYNC DATA')
+    // console.log('CTX:')
+    // console.log(ctx)
+    // ctx -> Context
+    return {
+      tasks: [
+        {
+          id: 1,
+          title: 'Pariatur dolor eos aperiam vitae dolor et.',
+          completed: false,
+          user_id: '1',
+          created_at: '2020-12-14T16:34:11.000000Z',
+          updated_at: '2020-12-14T16:34:11.000000Z',
+        },
+        {
+          id: 2,
+          title: 'Corporis ut sunt placeat magni.',
+          completed: false,
+          user_id: '1',
+          created_at: '2020-12-14T16:34:11.000000Z',
+          updated_at: '2020-12-14T16:34:11.000000Z',
+        },
+        {
+          id: 3,
+          title: 'Corporis ut sunt placeat magni.',
+          completed: false,
+          user_id: '1',
+          created_at: '2020-12-14T16:34:11.000000Z',
+          updated_at: '2020-12-14T16:34:11.000000Z',
+        },
+      ],
+    }
+  },
   mounted() {
+    console.log('######################## MOUNTED')
     window.addEventListener('hashchange', this.onHashChange)
     this.onHashChange()
-    this.tasks = tasksStorage.fetch()
+    // this.tasks = tasksStorage.fetch()
   },
   methods: {
     onHashChange() {
