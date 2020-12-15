@@ -311,7 +311,7 @@ const vue = {
     initEditingProcess(task) {
       // this.editing.id = task.id
       // this.editing.title = task.title
-      this.editing = task
+      this.editing = { ...task } // CLONE
     },
     initDeleteProcess(task) {
       this.showDeleteConfirmationDialog = true
