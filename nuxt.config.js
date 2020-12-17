@@ -2,6 +2,12 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
+  publicRuntimeConfig: {
+    apiURL: process.env.API_URL,
+  },
+  privateRuntimeConfig: {
+    apiToken: process.env.API_TOKEN,
+  },
   head: {
     titleTemplate: '%s - nuxtVuetify',
     title: 'nuxtVuetify',

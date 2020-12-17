@@ -214,11 +214,11 @@ const vue = {
         // PUT http://localhost:8000/api/v1/user/tasks -> tasks
         // $axios
         this.$axios.setToken(
-          'vXrBmYo4BnIEFECvqKjMYqfLphS8ffPMyqjK6Qri',
+          '1Gft5nCKHHxB9Fz9oUl4oA7yLUyWN1z924pa3OZQ',
           'Bearer'
         )
         const response = this.$axios.$put(
-          'http://localhost:8000/api/v1/user/tasks',
+          'http://laravelserver.test/api/v1/user/tasks',
           {
             tasks: this.tasks,
           }
@@ -228,15 +228,16 @@ const vue = {
       deep: true,
     },
   },
-  async asyncData({ $axios }) {
+  // async asyncData({ $axios }) {
+  async asyncData({ $axios, $config }) {
     // asyncData(ctx) {
     //   ctx.$axios
     // JAVASCRIPT then catch -> PROMISES -> async /await -> PROMISES HELL CALLBACK
-    $axios.setToken('vXrBmYo4BnIEFECvqKjMYqfLphS8ffPMyqjK6Qri', 'Bearer')
+    console.log($config)
+    $axios.setToken('1Gft5nCKHHxB9Fz9oUl4oA7yLUyWN1z924pa3OZQ', 'Bearer')
     // await $axios.$get('http://laravelserver.test/api/v1/user/tasks')
-    const response = await $axios.$get(
-      'http://localhost:8000/api/v1/user/tasks'
-    )
+    console.log($config.apiURL + 'user/tasks')
+    const response = await $axios.$get($config.apiURL + 'user/tasks')
     console.log(response)
     console.log('ASYNC DATA')
     // console.log('CTX:')
