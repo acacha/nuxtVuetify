@@ -210,71 +210,28 @@ const vue = {
   watch: {
     tasks: {
       handler(tasks) {
-        // tasksStorage.save(tasks)
-        // PUT http://localhost:8000/api/v1/user/tasks -> tasks
-        // $axios
-        this.$axios.setToken(
-          '1Gft5nCKHHxB9Fz9oUl4oA7yLUyWN1z924pa3OZQ',
-          'Bearer'
-        )
-        const response = this.$axios.$put(
-          'http://laravelserver.test/api/v1/user/tasks',
-          {
-            tasks: this.tasks,
-          }
-        )
-        console.log(response)
+        console.log('this.$config.apiToken:')
+        console.log(this.$config.apiToken)
+        console.log('this.$config.apiURL:')
+        console.log(this.$config.apiURL)
+        this.$axios.setToken(this.$config.apiToken, 'Bearer')
+        this.$axios.$put(this.$config.apiURL + 'user/tasks', {
+          tasks: this.tasks,
+        })
       },
       deep: true,
     },
   },
   // async asyncData({ $axios }) {
   async asyncData({ $axios, $config }) {
-    // asyncData(ctx) {
-    //   ctx.$axios
-    // JAVASCRIPT then catch -> PROMISES -> async /await -> PROMISES HELL CALLBACK
-    console.log($config)
-    $axios.setToken('1Gft5nCKHHxB9Fz9oUl4oA7yLUyWN1z924pa3OZQ', 'Bearer')
+    $axios.setToken($config.apiToken, 'Bearer')
     // await $axios.$get('http://laravelserver.test/api/v1/user/tasks')
-    console.log($config.apiURL + 'user/tasks')
     const response = await $axios.$get($config.apiURL + 'user/tasks')
-    console.log(response)
-    console.log('ASYNC DATA')
-    // console.log('CTX:')
-    // console.log(ctx)
-    // ctx -> Context
     return {
       tasks: response,
-      //   [
-      //   {
-      //     id: 1,
-      //     title: 'Pariatur dolor eos aperiam vitae dolor et.',
-      //     completed: false,
-      //     user_id: '1',
-      //     created_at: '2020-12-14T16:34:11.000000Z',
-      //     updated_at: '2020-12-14T16:34:11.000000Z',
-      //   },
-      //   {
-      //     id: 2,
-      //     title: 'Corporis ut sunt placeat magni.',
-      //     completed: false,
-      //     user_id: '1',
-      //     created_at: '2020-12-14T16:34:11.000000Z',
-      //     updated_at: '2020-12-14T16:34:11.000000Z',
-      //   },
-      //   {
-      //     id: 3,
-      //     title: 'Corporis ut sunt placeat magni.',
-      //     completed: false,
-      //     user_id: '1',
-      //     created_at: '2020-12-14T16:34:11.000000Z',
-      //     updated_at: '2020-12-14T16:34:11.000000Z',
-      //   },
-      // ],
     }
   },
   mounted() {
-    console.log('######################## MOUNTED')
     window.addEventListener('hashchange', this.onHashChange)
     this.onHashChange()
     // this.tasks = tasksStorage.fetch()
@@ -331,10 +288,6 @@ const vue = {
       this.snackBarMessage = 'Tasca eliminada correctament!'
       this.showSnackbar = true
     },
-    // toggle(task) {
-    //   console.log('TODO TOGGLE TASK')
-    //   console.log(task)
-    // },
   },
 }
 
